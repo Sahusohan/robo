@@ -33,7 +33,7 @@
 
     <!-- main hero section: photo + founder info -->
     <div class="hero">
-      <!-- left column: photo card (Sohan's photo - FIXED & SHARP) -->
+      <!-- left column: photo card (Sohan's photo) -->
       <div class="photo-card slide-in-left">
         <div class="image-circle" id="profilePhoto">
           <img src="https://i.postimg.cc/FdmHYdWF/Whats-App-Image-2026-03-13-at-3-13-46-PM.jpg" 
@@ -150,7 +150,30 @@
     </footer>
   </div>
 
-  <!-- separate JavaScript file (GSAP & animations) -->
+  <!-- Firebase SDKs (at the bottom, right before closing body) -->
+  <script type="module">
+    // Import Firebase functions
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBPeJZRj48zLkgLziX-AaB--edSS_GfoOU",
+      authDomain: "anonymousconfession-19707.firebaseapp.com",
+      projectId: "anonymousconfession-19707",
+      storageBucket: "anonymousconfession-19707.firebasestorage.app",
+      messagingSenderId: "513711142017",
+      appId: "1:513711142017:web:319791913b52aa5b644980",
+      measurementId: "G-6LJFF4JVBD"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    console.log("🔥 Firebase initialized for Tiny Robotics!");
+  </script>
+
+  <!-- GSAP and your scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
