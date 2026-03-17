@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — TinyBotics</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">tiny<span>botics</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html" class="active">Services</a></li>
+    <li><a href="portfolio.html">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html" class="nav-cta">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="portfolio.html">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</div>
+
+<div class="hero-bg" style="position:fixed;inset:0;pointer-events:none;z-index:0;">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero" style="position:relative;z-index:1;">
+  <div class="container">
+    <p class="section-tag reveal">Our Services</p>
+    <h1 class="reveal delay-1">Everything You Need<br/><em class="gradient-text">Online</em></h1>
+    <p class="reveal delay-2">From a simple landing page to a full-featured store — we build it all with care, code, and creativity.</p>
+  </div>
+</section>
+
+<!-- SERVICES FULL -->
+<section class="services-full" style="position:relative;z-index:1;">
+  <div class="container">
+
+    <div class="service-row">
+      <div class="service-row-text reveal">
+        <span class="service-icon-lg">🌐</span>
+        <h3>Business Websites</h3>
+        <p>A professional website is your 24/7 salesperson. We design multi-page business sites that look incredible, load fast, and communicate your brand clearly.</p>
+        <ul class="service-features">
+          <li>Custom multi-page design (Home, About, Services, Contact)</li>
+          <li>Mobile responsive across all devices</li>
+          <li>SEO-optimized structure and metadata</li>
+          <li>Google Analytics integration</li>
+          <li>Contact forms and maps integration</li>
+          <li>Fast hosting setup guidance</li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary">Get a Quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-row-visual reveal delay-2" data-icon="🌐">
+        <div style="text-align:center;">
+          <div style="font-size:80px;margin-bottom:16px;">🌐</div>
+          <p style="color:var(--text-muted);font-size:14px;">Multi-page professional websites</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-row reverse">
+      <div class="service-row-text reveal delay-1">
+        <span class="service-icon-lg">🚀</span>
+        <h3>Landing Pages</h3>
+        <p>Turn ad clicks into real customers. High-converting landing pages built with one goal in mind: your conversion rate.</p>
+        <ul class="service-features">
+          <li>Single-page high-impact design</li>
+          <li>Lead capture forms & CTA buttons</li>
+          <li>A/B testing ready structure</li>
+          <li>Lightning fast load speed (&lt;2s)</li>
+          <li>Pixel tracking integration</li>
+          <li>WhatsApp & call button integration</li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary">Get a Quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-row-visual reveal" data-icon="🚀">
+        <div style="text-align:center;">
+          <div style="font-size:80px;margin-bottom:16px;">🚀</div>
+          <p style="color:var(--text-muted);font-size:14px;">Optimised for conversions</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-row">
+      <div class="service-row-text reveal">
+        <span class="service-icon-lg">🛒</span>
+        <h3>E-Commerce Stores</h3>
+        <p>Launch your online store with everything you need to sell. We build seamless shopping experiences that customers love.</p>
+        <ul class="service-features">
+          <li>Product listing & category pages</li>
+          <li>Razorpay / Stripe payment gateway</li>
+          <li>Cart, wishlist & checkout flow</li>
+          <li>Order management system</li>
+          <li>Inventory & stock management</li>
+          <li>Discount & coupon system</li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary">Get a Quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-row-visual reveal delay-2" data-icon="🛒">
+        <div style="text-align:center;">
+          <div style="font-size:80px;margin-bottom:16px;">🛒</div>
+          <p style="color:var(--text-muted);font-size:14px;">Full-featured online stores</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-row reverse">
+      <div class="service-row-text reveal delay-1">
+        <span class="service-icon-lg">🎨</span>
+        <h3>Portfolio Websites</h3>
+        <p>Show the world what you're made of. Elegant, animated portfolios for photographers, designers, developers, and creatives.</p>
+        <ul class="service-features">
+          <li>Unique animated layouts</li>
+          <li>Image gallery & lightbox</li>
+          <li>Project showcase pages</li>
+          <li>Blog / case study section</li>
+          <li>Contact & booking form</li>
+          <li>Social media integration</li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary">Get a Quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-row-visual reveal" data-icon="🎨">
+        <div style="text-align:center;">
+          <div style="font-size:80px;margin-bottom:16px;">🎨</div>
+          <p style="color:var(--text-muted);font-size:14px;">For creatives & professionals</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" style="position:relative;z-index:1;">
+  <div class="container">
+    <p class="section-tag text-center reveal">Transparent Pricing</p>
+    <h2 class="section-title text-center reveal delay-1">Simple, Honest<br/><em>Plans</em></h2>
+    <p class="text-center reveal delay-2" style="color:var(--text-muted);font-size:16px;max-width:500px;margin:0 auto;">No hidden fees. No surprises. Just great websites at fair prices. Contact us for a custom quote.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card reveal delay-1">
+        <p class="pricing-name">Starter</p>
+        <div class="pricing-price">₹4,999<span>/project</span></div>
+        <p class="pricing-desc">Perfect for small businesses and freelancers just starting out.</p>
+        <ul class="pricing-features">
+          <li>1-3 Page Website</li>
+          <li>Mobile Responsive</li>
+          <li>Basic SEO Setup</li>
+          <li>Contact Form</li>
+          <li>7-Day Delivery</li>
+          <li>1 Month Support</li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
+      </div>
+      <div class="pricing-card featured reveal delay-2">
+        <span class="featured-badge">Most Popular</span>
+        <p class="pricing-name">Professional</p>
+        <div class="pricing-price">₹9,999<span>/project</span></div>
+        <p class="pricing-desc">For businesses that want a powerful, feature-rich website.</p>
+        <ul class="pricing-features">
+          <li>5-8 Page Website</li>
+          <li>Custom Animations</li>
+          <li>Advanced SEO</li>
+          <li>Google Analytics</li>
+          <li>10-14 Day Delivery</li>
+          <li>3 Month Support</li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Get Started</a>
+      </div>
+      <div class="pricing-card reveal delay-3">
+        <p class="pricing-name">E-Commerce</p>
+        <div class="pricing-price">₹19,999<span>/project</span></div>
+        <p class="pricing-desc">Full-featured online store with payment gateway and more.</p>
+        <ul class="pricing-features">
+          <li>Full E-Commerce Store</li>
+          <li>Payment Gateway</li>
+          <li>Admin Dashboard</li>
+          <li>Product Management</li>
+          <li>14-21 Day Delivery</li>
+          <li>6 Month Support</li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" style="position:relative;z-index:1;">
+  <div class="container">
+    <p class="section-tag text-center reveal">FAQ</p>
+    <h2 class="section-title text-center reveal delay-1">Common <em>Questions</em></h2>
+    <div class="faq-grid">
+      <div class="faq-item reveal delay-1">
+        <div class="faq-question"><h4>How long does it take to build a website?</h4><div class="faq-toggle">+</div></div>
+        <div class="faq-answer"><p>Most websites are delivered within 7–14 business days depending on the complexity. E-commerce projects may take 14–21 days. We'll give you a clear timeline before we start.</p></div>
+      </div>
+      <div class="faq-item reveal delay-2">
+        <div class="faq-question"><h4>Do you provide hosting?</h4><div class="faq-toggle">+</div></div>
+        <div class="faq-answer"><p>We help you set up hosting on your preferred platform (GitHub Pages for free hosting, or Hostinger, GoDaddy for premium hosting). We guide you through the entire process.</p></div>
+      </div>
+      <div class="faq-item reveal delay-3">
+        <div class="faq-question"><h4>Can I update the website myself?</h4><div class="faq-toggle">+</div></div>
+        <div class="faq-answer"><p>Yes! We build easy-to-manage sites and provide a handover guide. If you need changes, we're also available for ongoing support at reasonable rates.</p></div>
+      </div>
+      <div class="faq-item reveal delay-4">
+        <div class="faq-question"><h4>What do I need to provide?</h4><div class="faq-toggle">+</div></div>
+        <div class="faq-answer"><p>Just share your business details, logo (if any), photos, and any content you want on the site. Don't have these? We can help with content writing and stock images too!</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question"><h4>Do you offer revisions?</h4><div class="faq-toggle">+</div></div>
+        <div class="faq-answer"><p>Absolutely. Every project includes up to 3 rounds of revisions to make sure you're completely happy with the final product.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip">
+  <div class="container">
+    <div class="cta-content reveal">
+      <h2>Ready to get started?</h2>
+      <p>Contact us today and get your free project quote within 24 hours.</p>
+      <a href="contact.html" class="btn btn-white">Contact Us Now</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">tiny<span>botics</span></a>
+        <p>Web design studio crafting beautiful, functional websites for businesses of all sizes.</p>
+        <p class="footer-domain">🌐 tinybotics.in</p>
+      </div>
+      <div class="footer-links">
+        <h5>Pages</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="portfolio.html">Work</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h5>Contact</h5>
+        <p>📞 <a href="tel:7060128937">7060128937</a></p>
+        <p>✉️ <a href="mailto:sohansahu040@gmail.com">sohansahu040@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 TinyBotics. All rights reserved.</p></div>
+  </div>
+</footer>
+<script src="main.js"></script>
+<script type="module" src="firebase-tracker.js"></script>
+</body>
+</html>
