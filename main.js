@@ -194,17 +194,35 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-// Contact Form
+// Contact Form — submits to Formspree
 const form = document.getElementById('contactForm');
 if (form) {
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = form.querySelector('.form-submit');
+    const originalHTML = btn.innerHTML;
     btn.textContent = 'Sending...';
     btn.disabled = true;
-    setTimeout(() => {
-      form.style.display = 'none';
-      document.getElementById('formSuccess').classList.add('show');
-    }, 1500);
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('formSuccess').classList.add('show');
+      } else {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+        alert('Oops! Something went wrong. Please try again or WhatsApp us directly.');
+      }
+    } catch (err) {
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+      alert('Oops! Something went wrong. Please try again or WhatsApp us directly.');
+    }
   });
 }
