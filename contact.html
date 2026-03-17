@@ -101,45 +101,50 @@
         <div class="contact-form">
           <h3 style="font-family:var(--font-display);font-size:24px;font-weight:800;margin-bottom:28px;">Send Us a Message</h3>
           
-          <form id="contactForm">
+          <form id="contactForm" action="https://formspree.io/f/mreyoard" method="POST">
+
+            <!-- Formspree hidden fields for better email formatting -->
+            <input type="hidden" name="_subject" value="New Project Enquiry — TinyBotics"/>
+            <input type="hidden" name="_next" value=""/>
+
             <div class="form-row">
               <div class="form-group">
                 <label for="name">Your Name</label>
-                <input type="text" id="name" placeholder="Rahul Sharma" required/>
+                <input type="text" id="name" name="name" placeholder="Rahul Sharma" required/>
               </div>
               <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" placeholder="+91 98765 43210"/>
+                <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210"/>
               </div>
             </div>
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" placeholder="rahul@example.com" required/>
+              <input type="email" id="email" name="email" placeholder="rahul@example.com" required/>
             </div>
             <div class="form-group">
               <label for="service">Service Needed</label>
-              <select id="service">
+              <select id="service" name="service">
                 <option value="">Select a service...</option>
-                <option value="business">Business Website</option>
-                <option value="landing">Landing Page</option>
-                <option value="ecommerce">E-Commerce Store</option>
-                <option value="portfolio">Portfolio Website</option>
-                <option value="other">Other / Not Sure</option>
+                <option value="Business Website">Business Website</option>
+                <option value="Landing Page">Landing Page</option>
+                <option value="E-Commerce Store">E-Commerce Store</option>
+                <option value="Portfolio Website">Portfolio Website</option>
+                <option value="Other / Not Sure">Other / Not Sure</option>
               </select>
             </div>
             <div class="form-group">
               <label for="budget">Budget Range</label>
-              <select id="budget">
+              <select id="budget" name="budget">
                 <option value="">Select budget range...</option>
-                <option value="starter">Under ₹5,000</option>
-                <option value="pro">₹5,000 – ₹15,000</option>
-                <option value="premium">₹15,000 – ₹30,000</option>
-                <option value="custom">₹30,000+</option>
+                <option value="Under ₹5,000">Under ₹5,000</option>
+                <option value="₹5,000 – ₹15,000">₹5,000 – ₹15,000</option>
+                <option value="₹15,000 – ₹30,000">₹15,000 – ₹30,000</option>
+                <option value="₹30,000+">₹30,000+</option>
               </select>
             </div>
             <div class="form-group">
               <label for="message">Project Details</label>
-              <textarea id="message" rows="4" placeholder="Tell us about your business and what you're looking for..." required></textarea>
+              <textarea id="message" name="message" rows="4" placeholder="Tell us about your business and what you're looking for..." required></textarea>
             </div>
             <button type="submit" class="btn btn-primary form-submit">
               Send Message
