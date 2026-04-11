@@ -157,7 +157,7 @@ const firebaseConfig = {
 };
 
 // ⚠️ SET YOUR ADMIN EMAIL HERE
-const ADMIN_EMAIL = "sohansahu040@gmail.com";
+const ADMIN_EMAIL = "admin@tinybotics.com";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -214,6 +214,15 @@ window.loadOrders = async function() {
       if(o.status==='delivered') delivered++;
       if(o.status==='confirmed'||o.status==='shipped'||o.status==='delivered') revenue += o.price||0;
       const date = o.createdAt ? new Date(o.createdAt.toMillis()).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : 'N/A';
+      const a = o.address;
+      const addrCell = a && a.pincode
+        ? `<div style="font-size:0.78rem;line-height:1.6;min-width:180px">
+            <strong>${a.name}</strong> · 📞 ${a.phone}<br>
+            ${a.street}<br>
+            ${a.city}, ${a.state} - ${a.pincode}
+            ${a.landmark ? '<br><span style=\"color:var(--muted)\">📍 '+a.landmark+'</span>' : ''}
+           </div>`
+        : '<span style="color:var(--muted);font-size:0.78rem">Not added</span>';
       rows += `<tr>
         <td style="font-family:'DM Mono',monospace;font-size:0.74rem;color:var(--muted)">${o.id.slice(0,10).toUpperCase()}</td>
         <td style="font-weight:600">${o.userName||'—'}</td>
@@ -221,6 +230,7 @@ window.loadOrders = async function() {
         <td>${o.product||'TinyBot Pro'}</td>
         <td style="color:var(--green);font-weight:700">₹${(o.price||0).toLocaleString('en-IN')}</td>
         <td style="color:var(--text2);font-size:0.82rem">${date}</td>
+        <td>${addrCell}</td>
         <td>
           <select class="admin-select" onchange="updateStatus('${o.id}',this.value)">
             <option value="pending" ${o.status==='pending'?'selected':''}>⏳ Pending</option>
@@ -239,7 +249,7 @@ window.loadOrders = async function() {
     const tableHTML = `<table class="orders-table">
       <thead><tr>
         <th>ORDER ID</th><th>NAME</th><th>EMAIL</th><th>PRODUCT</th>
-        <th>PRICE</th><th>DATE</th><th>STATUS</th><th>TRACKING</th>
+        <th>PRICE</th><th>DATE</th><th>SHIPPING ADDRESS</th><th>STATUS</th><th>TRACKING</th>
       </tr></thead>
       <tbody>${rows || '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)">No orders yet.</td></tr>'}</tbody>
     </table>`;
@@ -314,4 +324,5 @@ window.switchPanel = switchPanel;
 window.showToast = showToast;
 </script>
 </body>
-</html>
+                                                                                 </html>
+                                  
