@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — TinyBotics</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .admin-wrap { display: flex; min-height: 100vh; }
+  .sidebar { width: 230px; background: var(--surface); border-right: 1px solid var(--border); padding: 24px 14px; position: fixed; height: 100vh; overflow-y: auto; z-index: 10; }
+  .sidebar-logo { font-weight: 800; font-size: 1.15rem; padding: 0 8px 20px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+  .sidebar-logo span { color: var(--accent); }
+  .sidebar-tag { font-size: 0.62rem; font-family: 'DM Mono', monospace; letter-spacing: 3px; color: var(--red); display: block; margin-top: 2px; }
+  .side-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 11px 12px; border-radius: 10px; border: none; background: none; color: var(--text2); font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.2s; text-align: left; margin-bottom: 3px; }
+  .side-btn:hover { background: var(--surface2); color: var(--text); }
+  .side-btn.active { background: rgba(79,125,255,0.12); color: var(--accent); }
+  .admin-main { margin-left: 230px; padding: 32px; flex: 1; min-width: 0; }
+  .admin-header { margin-bottom: 28px; }
+  .admin-header h1 { font-size: 1.7rem; font-weight: 800; }
+  .admin-header p { color: var(--text2); font-size: 0.88rem; margin-top: 4px; }
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+  .stat-box-label { font-size: 0.7rem; font-family: 'DM Mono', monospace; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+  .stat-box-val { font-size: 1.8rem; font-weight: 800; }
+  .col-blue{color:var(--accent);}.col-orange{color:var(--orange);}.col-green{color:var(--green);}.col-purple{color:#a855f7;}.col-cyan{color:var(--accent2);}
+  .panel-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .panel-card-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
+  .panel-card-head h3 { font-size: 1rem; font-weight: 700; }
+  .refresh-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text2); padding: 7px 14px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-family: 'Outfit', sans-serif; transition: all 0.2s; }
+  .refresh-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .orders-table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+  .orders-table th { text-align: left; padding: 11px 14px; font-size: 0.68rem; color: var(--muted); font-family: 'DM Mono', monospace; border-bottom: 1px solid var(--border); font-weight: 500; letter-spacing: 0.5px; white-space: nowrap; }
+  .orders-table td { padding: 13px 14px; font-size: 0.84rem; border-bottom: 1px solid rgba(100,160,255,0.05); vertical-align: top; }
+  .orders-table tr:last-child td { border-bottom: none; }
+  .orders-table tr:hover td { background: rgba(255,255,255,0.012); }
+  .admin-select { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 7px 8px; border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 0.8rem; cursor: pointer; outline: none; }
+  .admin-input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 8px; font-size: 0.79rem; width: 155px; font-family: 'Outfit', sans-serif; outline: none; }
+  .admin-input:focus { border-color: var(--accent2); }
+  .save-btn { background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.3); color: var(--green); padding: 7px 10px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; font-family: 'Outfit', sans-serif; margin-left: 4px; transition: all 0.2s; white-space: nowrap; }
+  .save-btn:hover { background: rgba(0,229,160,0.2); }
+  .del-btn { background: rgba(255,77,106,0.1); border: 1px solid rgba(255,77,106,0.25); color: var(--red); padding: 7px 10px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; font-family: 'Outfit', sans-serif; transition: all 0.2s; white-space: nowrap; }
+  .del-btn:hover { background: rgba(255,77,106,0.22); }
+  .verify-btn { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3); color: var(--accent2); padding: 7px 10px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; font-family: 'Outfit', sans-serif; transition: all 0.2s; margin-bottom: 4px; white-space: nowrap; }
+  .verify-btn:hover { background: rgba(0,212,255,0.2); }
+  .table-wrap { overflow-x: auto; }
+  .section-panel { display: none; }
+  .section-panel.active { display: block; }
+  /* VISITOR */
+  .vis-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; padding: 20px; }
+  .vis-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .vis-email { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; word-break: break-all; }
+  .vis-name { font-size: 0.82rem; color: var(--text2); margin-bottom: 6px; }
+  .vis-time { font-size: 0.74rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .vis-device { font-size: 0.72rem; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); line-height: 1.7; }
+  .online-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--green); margin-bottom: 6px; }
+  .online-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+  .admin-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: var(--bg); }
+  /* payment badge */
+  .pay-pending-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.25); color: var(--accent2); font-size: 0.72rem; padding: 3px 9px; border-radius: 100px; font-weight: 700; }
+  @media(max-width:768px){
+    .sidebar{width:100%;height:auto;position:relative;}
+    .admin-main{margin-left:0;padding:16px;}
+    .admin-wrap{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ADMIN LOGIN -->
+<div id="admin-login" class="admin-login">
+  <div class="auth-card" style="max-width:400px">
+    <div class="auth-logo">🔐</div>
+    <h1 class="auth-title">Admin Login</h1>
+    <p class="auth-sub">TinyBotics internal dashboard — private access only</p>
+    <div class="form-group">
+      <label>Admin Email</label>
+      <input type="email" id="adm-email" placeholder="your admin email" onkeydown="if(event.key==='Enter')adminLogin()">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="adm-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
+    </div>
+    <div class="form-error" id="adm-err"></div>
+    <button class="auth-btn" onclick="adminLogin()" id="adm-btn">Access Dashboard</button>
+    <p style="font-size:0.75rem;color:var(--muted);text-align:center;margin-top:14px">Authorized personnel only.</p>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="admin-dashboard" style="display:none">
+  <div class="admin-wrap">
+    <div class="sidebar">
+      <div class="sidebar-logo">Tiny<span>Botics</span><span class="sidebar-tag">ADMIN PANEL</span></div>
+      <button class="side-btn active" onclick="switchPanel('dashboard',this)">📊 Dashboard</button>
+      <button class="side-btn" onclick="switchPanel('orders',this)">📦 Orders</button>
+      <button class="side-btn" onclick="switchPanel('visitors',this)">👥 Visitors</button>
+      <div style="margin-top:40px;padding-top:20px;border-top:1px solid var(--border)">
+        <button class="side-btn" onclick="adminLogout()" style="color:var(--red)">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="admin-main">
+
+      <!-- DASHBOARD -->
+      <div class="section-panel active" id="panel-dashboard">
+        <div class="admin-header"><h1>Dashboard</h1><p>Overview of all TinyBotics store activity.</p></div>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-box-label">TOTAL ORDERS</div><div class="stat-box-val col-blue" id="s-total">—</div></div>
+          <div class="stat-box"><div class="stat-box-label">PENDING / VERIFYING</div><div class="stat-box-val col-orange" id="s-pending">—</div></div>
+          <div class="stat-box"><div class="stat-box-label">DELIVERED</div><div class="stat-box-val col-green" id="s-delivered">—</div></div>
+          <div class="stat-box"><div class="stat-box-label">TOTAL REVENUE</div><div class="stat-box-val col-green" id="s-revenue">—</div></div>
+          <div class="stat-box"><div class="stat-box-label">USERS ONLINE</div><div class="stat-box-val col-purple" id="s-online">—</div></div>
+          <div class="stat-box"><div class="stat-box-label">PAYMENT PENDING</div><div class="stat-box-val col-cyan" id="s-verifying">—</div></div>
+        </div>
+        <div class="panel-card">
+          <div class="panel-card-head"><h3>Recent Orders</h3><button class="refresh-btn" onclick="loadOrders()">↻ Refresh</button></div>
+          <div class="table-wrap" id="dash-orders-wrap"><div style="padding:32px;text-align:center;color:var(--muted)">Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="section-panel" id="panel-orders">
+        <div class="admin-header"><h1>All Orders</h1><p>Verify payments, update status, add tracking links, delete orders.</p></div>
+        <div class="panel-card">
+          <div class="panel-card-head">
+            <h3>Orders</h3>
+            <div style="display:flex;gap:8px">
+              <button class="refresh-btn" onclick="loadOrders()">↻ Refresh</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="orders-table-wrap"><div style="padding:32px;text-align:center;color:var(--muted)">Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- VISITORS -->
+      <div class="section-panel" id="panel-visitors">
+        <div class="admin-header"><h1>Visitors</h1><p>All logged-in users with device info, location, and online status.</p></div>
+        <div class="stats-row" style="max-width:500px;margin-bottom:24px">
+          <div class="stat-box"><div class="stat-box-label">ONLINE NOW</div><div class="stat-box-val col-green" id="v-online">—</div></div>
+          <div class="stat-box"><div class="stat-box-label">TOTAL USERS</div><div class="stat-box-val col-blue" id="v-total">—</div></div>
+        </div>
+        <div class="panel-card">
+          <div class="panel-card-head"><h3>Visitor List</h3><button class="refresh-btn" onclick="loadVisitors()">↻ Refresh</button></div>
+          <div id="vis-wrap"><div style="padding:32px;text-align:center;color:var(--muted)">Loading...</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBPeJZRj48zLkgLziX-AaB--edSS_GfoOU",
+  authDomain: "anonymousconfession-19707.firebaseapp.com",
+  projectId: "anonymousconfession-19707",
+  storageBucket: "anonymousconfession-19707.firebasestorage.app",
+  messagingSenderId: "513711142017",
+  appId: "1:513711142017:web:319791913b52aa5b644980"
+};
+
+// ⚠️ SET YOUR ADMIN EMAIL HERE
+const ADMIN_EMAIL = "admin@tinybotics.com";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, user => {
+  if (user && user.email === ADMIN_EMAIL) {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-dashboard').style.display = 'block';
+    loadOrders();
+    loadVisitors();
+  }
+});
+
+window.adminLogin = async function() {
+  const email = document.getElementById('adm-email').value.trim();
+  const pass  = document.getElementById('adm-pass').value;
+  const err   = document.getElementById('adm-err');
+  const btn   = document.getElementById('adm-btn');
+  err.textContent = '';
+  if (!email || !pass) { err.textContent = 'Please fill both fields.'; return; }
+  btn.textContent = 'Logging in...'; btn.disabled = true;
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, pass);
+    if (cred.user.email !== ADMIN_EMAIL) {
+      await signOut(auth);
+      err.textContent = 'Access denied.';
+      btn.textContent = 'Access Dashboard'; btn.disabled = false;
+    }
+  } catch(e) {
+    err.textContent = 'Invalid credentials.';
+    btn.textContent = 'Access Dashboard'; btn.disabled = false;
+  }
+};
+
+window.adminLogout = async () => { await signOut(auth); location.reload(); };
+
+function parseDevice(ua) {
+  if (!ua) return 'Unknown device';
+  let device = 'Desktop';
+  if (/Android/i.test(ua)) device = '📱 Android';
+  else if (/iPhone|iPad/i.test(ua)) device = '📱 iOS';
+  else if (/Windows/i.test(ua)) device = '💻 Windows';
+  else if (/Mac/i.test(ua)) device = '💻 Mac';
+  else if (/Linux/i.test(ua)) device = '💻 Linux';
+
+  let browser = '';
+  if (/Chrome/i.test(ua) && !/Edge/i.test(ua)) browser = 'Chrome';
+  else if (/Firefox/i.test(ua)) browser = 'Firefox';
+  else if (/Safari/i.test(ua)) browser = 'Safari';
+  else if (/Edge/i.test(ua)) browser = 'Edge';
+  return `${device} · ${browser}`;
+}
+
+window.loadOrders = async function() {
+  try {
+    const snap = await getDocs(collection(db, 'orders'));
+    const orders = [];
+    snap.forEach(d => orders.push({ id: d.id, ...d.data() }));
+    orders.sort((a,b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+
+    let total=0, pending=0, delivered=0, revenue=0, verifying=0;
+    let rows = '';
+
+    orders.forEach(o => {
+      total++;
+      if (o.status === 'pending') pending++;
+      if (o.status === 'verifying_payment') { verifying++; pending++; }
+      if (o.status === 'delivered') delivered++;
+      if (['confirmed','shipped','delivered'].includes(o.status)) revenue += o.price || 0;
+
+      const date = o.createdAt
+        ? new Date(o.createdAt.toMillis()).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})
+        : 'N/A';
+
+      const a = o.address;
+      const addrCell = a && a.pincode
+        ? `<div style="font-size:0.77rem;line-height:1.65;min-width:170px;color:var(--text2)">
+            <strong style="color:var(--text)">${a.name}</strong><br>
+            📞 ${a.phone}<br>
+            ${a.street}<br>
+            ${a.city}, ${a.state}<br>
+            📮 ${a.pincode}
+            ${a.landmark ? '<br>📍 '+a.landmark : ''}
+           </div>`
+        : '<span style="color:var(--muted);font-size:0.78rem">Not added</span>';
+
+      const statusOptions = ['pending','verifying_payment','confirmed','shipped','delivered']
+        .map(s => `<option value="${s}" ${o.status===s?'selected':''}>${
+          {pending:'⏳ Pending',verifying_payment:'🔍 Verifying Payment',confirmed:'✅ Confirmed',shipped:'🚚 Shipped',delivered:'📦 Delivered'}[s]
+        }</option>`).join('');
+
+      const verifyBtn = o.status === 'verifying_payment'
+        ? `<button class="verify-btn" onclick="verifyAndConfirm('${o.id}')">✅ Confirm Payment</button><br>`
+        : '';
+
+      rows += `<tr>
+        <td style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted)">${o.id.slice(0,10).toUpperCase()}</td>
+        <td>
+          <div style="font-weight:700">${o.userName||'—'}</div>
+          <div style="font-size:0.78rem;color:var(--text2)">${o.userEmail||'—'}</div>
+        </td>
+        <td>${o.product||'TinyBot Pro'}<br><span style="color:var(--green);font-weight:800">₹${(o.price||0).toLocaleString('en-IN')}</span></td>
+        <td style="font-size:0.8rem;color:var(--text2)">${date}</td>
+        <td>${addrCell}</td>
+        <td>
+          ${verifyBtn}
+          <select class="admin-select" onchange="updateStatus('${o.id}',this.value)">${statusOptions}</select>
+        </td>
+        <td>
+          <input class="admin-input" id="track-${o.id}" placeholder="Tracking URL" value="${o.trackingLink||''}">
+          <button class="save-btn" onclick="saveTracking('${o.id}')">Save</button>
+        </td>
+        <td>
+          <button class="del-btn" onclick="deleteOrder('${o.id}')">🗑️ Delete</button>
+        </td>
+      </tr>`;
+    });
+
+    const tableHTML = `<table class="orders-table">
+      <thead><tr>
+        <th>ORDER ID</th><th>CUSTOMER</th><th>PRODUCT</th><th>DATE</th>
+        <th>SHIPPING ADDRESS</th><th>STATUS</th><th>TRACKING</th><th>ACTION</th>
+      </tr></thead>
+      <tbody>${rows || '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)">No orders yet.</td></tr>'}</tbody>
+    </table>`;
+
+    document.getElementById('orders-table-wrap').innerHTML = tableHTML;
+    document.getElementById('dash-orders-wrap').innerHTML = tableHTML;
+    document.getElementById('s-total').textContent = total;
+    document.getElementById('s-pending').textContent = pending;
+    document.getElementById('s-delivered').textContent = delivered;
+    document.getElementById('s-revenue').textContent = '₹'+revenue.toLocaleString('en-IN');
+    document.getElementById('s-verifying').textContent = verifying;
+  } catch(e) { console.error(e); showToast('Error loading orders','error'); }
+};
+
+window.updateStatus = async function(id, status) {
+  try {
+    await updateDoc(doc(db,'orders',id), { status });
+    showToast('Status updated: ' + status, 'success');
+    loadOrders();
+  } catch(e) { showToast('Failed to update','error'); }
+};
+
+window.verifyAndConfirm = async function(id) {
+  if (!confirm('Confirm this payment and mark order as Confirmed?')) return;
+  try {
+    await updateDoc(doc(db,'orders',id), { status: 'confirmed', paymentVerifiedByAdmin: true });
+    showToast('Payment confirmed! Order marked as Confirmed ✅', 'success');
+    loadOrders();
+  } catch(e) { showToast('Failed','error'); }
+};
+
+window.saveTracking = async function(id) {
+  const link = document.getElementById('track-'+id)?.value?.trim() || '';
+  try {
+    await updateDoc(doc(db,'orders',id), { trackingLink: link });
+    showToast('Tracking link saved! Customer will see it now.', 'success');
+  } catch(e) { showToast('Failed to save tracking','error'); }
+};
+
+window.deleteOrder = async function(id) {
+  if (!confirm('Are you sure you want to DELETE this order? This cannot be undone.')) return;
+  try {
+    await deleteDoc(doc(db,'orders',id));
+    showToast('Order deleted.', 'success');
+    loadOrders();
+  } catch(e) { showToast('Failed to delete order','error'); }
+};
+
+window.loadVisitors = async function() {
+  try {
+    const snap = await getDocs(collection(db,'visitors'));
+    const now = Date.now();
+    let online=0, total=0;
+    const cards = [];
+
+    snap.forEach(d => {
+      total++;
+      const v = d.data();
+      const ts = v.lastSeen?.toMillis?.() || 0;
+      const isOn = now - ts < 10*60*1000;
+      if (isOn) online++;
+
+      const device = parseDevice(v.userAgent);
+      const screen = v.screenW ? `${v.screenW}×${v.screenH}` : 'Unknown';
+      const lang = v.language || 'Unknown';
+      const ref = v.referrer || 'Direct';
+      const lastTime = ts ? new Date(ts).toLocaleString('en-IN') : 'Unknown';
+
+      cards.push(`<div class="vis-card">
+        ${isOn ? '<div class="online-badge">Online Now</div>' : ''}
+        <div class="vis-email">${v.email || d.id.slice(0,24)}</div>
+        <div class="vis-name">${v.name || 'No name'}</div>
+        <div class="vis-time">Last seen: ${lastTime}</div>
+        <div class="vis-device">
+          🖥️ ${device}<br>
+          📐 Screen: ${screen}<br>
+          🌐 Language: ${lang}<br>
+          🔗 Referrer: ${ref}
+        </div>
+      </div>`);
+    });
+
+    const html = `<div class="vis-grid">${cards.join('')}</div>`;
+    document.getElementById('vis-wrap').innerHTML = total ? html : '<div style="padding:32px;text-align:center;color:var(--muted)">No visitor data yet.</div>';
+    document.getElementById('v-online').textContent = online;
+    document.getElementById('v-total').textContent = total;
+    document.getElementById('s-online').textContent = online;
+  } catch(e) { console.error(e); }
+};
+</script>
+
+<script>
+function switchPanel(name, btn) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.side-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'orders') window.loadOrders?.();
+  if (name === 'visitors') window.loadVisitors?.();
+}
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  setTimeout(() => t.className = 'toast', 3200);
+}
+window.switchPanel = switchPanel;
+window.showToast = showToast;
+</script>
+</body>
+</html>
