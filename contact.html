@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — TinyBotics</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">Tiny<span>Botics</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+      <li><a href="orders.html">My Orders</a></li>
+    </ul>
+    <div class="nav-auth" id="nav-auth">
+      <a href="login.html" class="btn-outline">Login</a>
+      <a href="login.html#signup" class="btn-primary">Sign Up</a>
+    </div>
+    <div class="nav-user" id="nav-user" style="display:none">
+      <span class="user-greeting" id="user-greeting"></span>
+      <div class="avatar-wrap">
+        <div class="avatar" id="nav-avatar" onclick="document.getElementById('avatar-dropdown').classList.toggle('open')"></div>
+        <div class="avatar-dropdown" id="avatar-dropdown">
+          <a href="orders.html">📦 My Orders</a>
+          <button onclick="doLogout()">🚪 Logout</button>
+        </div>
+      </div>
+    </div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+  </div>
+</nav>
+
+<section class="inner-page">
+  <div class="container">
+    <div class="page-hero">
+      <p class="section-tag">Get In Touch</p>
+      <h1>Contact <span class="gradient-text">TinyBotics</span></h1>
+      <p class="page-sub">Have questions? We typically respond within a few hours.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-cards">
+        <div class="contact-card">
+          <div class="contact-icon">💬</div>
+          <h3>WhatsApp</h3>
+          <p>Fastest way to reach us. Click to open chat directly.</p>
+          <!-- REPLACE WITH YOUR NUMBER -->
+          <a href="https://wa.me/919999999999" target="_blank" class="contact-link">Chat on WhatsApp →</a>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">📦</div>
+          <h3>Order Support</h3>
+          <p>For order tracking, delivery queries, or status updates.</p>
+          <a href="orders.html" class="contact-link">View My Orders →</a>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">❓</div>
+          <h3>FAQ</h3>
+          <p>Check our frequently asked questions for quick answers.</p>
+          <a href="faq.html" class="contact-link">Browse FAQ →</a>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">🕐</div>
+          <h3>Response Time</h3>
+          <p>We typically reply within <strong style="color:var(--green)">2–4 hours</strong> on weekdays.</p>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap">
+        <h2>Send us a message</h2>
+        <p style="color:var(--text2);margin-bottom:28px;font-size:0.9rem">Fill the form and we'll get back to you via WhatsApp.</p>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="c-name" placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label>Your Phone / Email</label>
+          <input type="text" id="c-contact" placeholder="Phone or email">
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="c-msg" placeholder="What would you like to ask?" rows="5" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.92rem;outline:none;resize:vertical;"></textarea>
+        </div>
+        <button class="auth-btn" onclick="sendMsg()">Send via WhatsApp 💬</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="justify-content:center">
+      <p>© 2025 TinyBotics · Made with ❤️ in India</p>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const app = initializeApp({ apiKey:"AIzaSyBPeJZRj48zLkgLziX-AaB--edSS_GfoOU",authDomain:"anonymousconfession-19707.firebaseapp.com",projectId:"anonymousconfession-19707",storageBucket:"anonymousconfession-19707.firebasestorage.app",messagingSenderId:"513711142017",appId:"1:513711142017:web:319791913b52aa5b644980" });
+const auth = getAuth(app);
+onAuthStateChanged(auth, user => {
+  if(user){
+    document.getElementById('nav-auth').style.display='none';
+    document.getElementById('nav-user').style.display='flex';
+    const name=user.displayName||user.email.split('@')[0];
+    document.getElementById('user-greeting').textContent='Hi, '+name.split(' ')[0];
+    document.getElementById('nav-avatar').textContent=name.charAt(0).toUpperCase();
+    document.getElementById('c-name').value=user.displayName||'';
+    document.getElementById('c-contact').value=user.email||'';
+  }
+});
+window.doLogout=async()=>{await signOut(auth);window.location.href='login.html';};
+</script>
+<script>
+function toggleNav(){document.getElementById('nav-links').classList.toggle('open');}
+function sendMsg(){
+  const name=document.getElementById('c-name').value.trim();
+  const contact=document.getElementById('c-contact').value.trim();
+  const msg=document.getElementById('c-msg').value.trim();
+  if(!name||!msg){alert('Please fill your name and message.');return;}
+  const text=encodeURIComponent(`Hi TinyBotics! 👋\n\nName: ${name}\nContact: ${contact}\n\nMessage:\n${msg}`);
+  // REPLACE WITH YOUR NUMBER
+  window.open(`https://wa.me/919999999999?text=${text}`,'_blank');
+}
+window.sendMsg=sendMsg;
+</script>
+</body>
+</html>
