@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — TinyBotics</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .addr-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88); backdrop-filter: blur(14px);
+    z-index: 500; align-items: center; justify-content: center; padding: 20px;
+  }
+  .addr-overlay.open { display: flex; }
+  .addr-modal {
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 22px; padding: 40px; width: 100%; max-width: 540px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    max-height: 94vh; overflow-y: auto;
+  }
+  .addr-step-label {
+    display: inline-block; font-size: 0.7rem; font-family: 'DM Mono', monospace;
+    letter-spacing: 2px; color: var(--accent2); margin-bottom: 6px;
+  }
+  .addr-title { font-size: 1.45rem; font-weight: 800; margin-bottom: 6px; }
+  .addr-sub { color: var(--text2); font-size: 0.86rem; margin-bottom: 26px; line-height: 1.6; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .section-divider { font-size: 0.72rem; font-family: 'DM Mono', monospace; letter-spacing: 2px; color: var(--muted); margin: 20px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .addr-skip {
+    display: block; text-align: center; margin-top: 14px;
+    color: var(--muted); font-size: 0.82rem; cursor: pointer;
+    text-decoration: underline; background: none; border: none;
+    font-family: 'Outfit', sans-serif; width: 100%;
+  }
+  .addr-skip:hover { color: var(--text2); }
+  .req { color: var(--red); }
+  @media(max-width:500px) {
+    .form-row { grid-template-columns: 1fr; }
+    .addr-modal { padding: 28px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">Tiny<span>Botics</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-auth">
+      <a href="login.html" class="btn-primary">Login</a>
+    </div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+  </div>
+</nav>
+
+<section class="auth-section">
+  <div class="auth-orb auth-orb1"></div>
+  <div class="auth-orb auth-orb2"></div>
+  <div class="auth-card">
+
+    <!-- LOGIN -->
+    <div id="view-login">
+      <div class="auth-logo">🤖</div>
+      <h1 class="auth-title">Welcome Back</h1>
+      <p class="auth-sub">Login to your TinyBotics account</p>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="login-email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="form-error" id="login-err"></div>
+      <button class="auth-btn" id="login-btn" onclick="doLogin()">Login to Account</button>
+      <p class="auth-switch">Don't have an account? <a onclick="switchView('signup')">Sign up free</a></p>
+    </div>
+
+    <!-- SIGNUP -->
+    <div id="view-signup" style="display:none">
+      <div class="auth-logo">✨</div>
+      <h1 class="auth-title">Create Account</h1>
+      <p class="auth-sub">Join TinyBotics and order your robot</p>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="signup-name" placeholder="Your Full Name">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="signup-email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signup-pass" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter')doSignup()">
+      </div>
+      <div class="form-error" id="signup-err"></div>
+      <button class="auth-btn" id="signup-btn" onclick="doSignup()">Create Account</button>
+      <p class="auth-switch">Already have an account? <a onclick="switchView('login')">Login</a></p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== CONTACT + SHIPPING ADDRESS MODAL ===== -->
+<div class="addr-overlay" id="addr-overlay">
+  <div class="addr-modal">
+    <div class="addr-step-label">STEP 2 OF 2</div>
+    <div class="addr-title">📦 Complete Your Profile</div>
+    <div class="addr-sub">
+      We need your contact and shipping details to deliver your TinyBot.
+      This is saved securely and auto-filled on future orders.
+    </div>
+
+    <!-- CONTACT INFO -->
+    <div class="section-divider">CONTACT INFORMATION</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name <span class="req">*</span></label>
+        <input type="text" id="addr-name" placeholder="As on your ID">
+      </div>
+      <div class="form-group">
+        <label>Mobile Number <span class="req">*</span></label>
+        <input type="tel" id="addr-phone" placeholder="10-digit number" maxlength="10">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email Address <span class="req">*</span></label>
+      <input type="email" id="addr-email" placeholder="your@email.com" readonly style="opacity:0.7;cursor:not-allowed">
+    </div>
+
+    <!-- SHIPPING ADDRESS -->
+    <div class="section-divider">SHIPPING ADDRESS</div>
+    <div class="form-group">
+      <label>House / Flat / Building, Street, Area <span class="req">*</span></label>
+      <input type="text" id="addr-street" placeholder="e.g. B-204, Rose Apartments, MG Road, Andheri West">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>City <span class="req">*</span></label>
+        <input type="text" id="addr-city" placeholder="Mumbai">
+      </div>
+      <div class="form-group">
+        <label>State <span class="req">*</span></label>
+        <input type="text" id="addr-state" placeholder="Maharashtra">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Pincode <span class="req">*</span></label>
+        <input type="text" id="addr-pin" placeholder="400001" maxlength="6">
+      </div>
+      <div class="form-group">
+        <label>Landmark <span style="color:var(--muted);font-size:0.74rem">(optional)</span></label>
+        <input type="text" id="addr-landmark" placeholder="Near XYZ mall">
+      </div>
+    </div>
+
+    <div class="form-error" id="addr-err"></div>
+    <button class="auth-btn" id="addr-save-btn" onclick="saveProfile()">Save & Continue to Store →</button>
+    <button class="addr-skip" onclick="skipProfile()">Skip for now — I'll add it before ordering</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBPeJZRj48zLkgLziX-AaB--edSS_GfoOU",
+  authDomain: "anonymousconfession-19707.firebaseapp.com",
+  projectId: "anonymousconfession-19707",
+  storageBucket: "anonymousconfession-19707.firebasestorage.app",
+  messagingSenderId: "513711142017",
+  appId: "1:513711142017:web:319791913b52aa5b644980"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let _user = null;
+
+// If already fully set up, redirect
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    try {
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      if (snap.exists() && snap.data().address?.pincode) {
+        window.location.href = 'index.html';
+        return;
+      }
+    } catch(e) {}
+  }
+});
+
+if (window.location.hash === '#signup') switchView('signup');
+
+async function afterAuth(user) {
+  _user = user;
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (snap.exists() && snap.data().address?.pincode) {
+      window.location.href = 'index.html';
+      return;
+    }
+  } catch(e) {}
+  // Pre-fill known fields
+  document.getElementById('addr-name').value = user.displayName || '';
+  document.getElementById('addr-email').value = user.email || '';
+  document.getElementById('addr-overlay').classList.add('open');
+}
+
+window.doLogin = async function() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const err   = document.getElementById('login-err');
+  const btn   = document.getElementById('login-btn');
+  err.textContent = '';
+  if (!email || !pass) { err.textContent = 'Please fill all fields.'; return; }
+  btn.textContent = 'Logging in...'; btn.disabled = true;
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, pass);
+    await afterAuth(cred.user);
+  } catch(e) {
+    err.textContent = e.code === 'auth/invalid-credential' ? 'Wrong email or password.' : 'Login failed. Try again.';
+    btn.textContent = 'Login to Account'; btn.disabled = false;
+  }
+};
+
+window.doSignup = async function() {
+  const name  = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pass  = document.getElementById('signup-pass').value;
+  const err   = document.getElementById('signup-err');
+  const btn   = document.getElementById('signup-btn');
+  err.textContent = '';
+  if (!name || !email || !pass) { err.textContent = 'Please fill all fields.'; return; }
+  if (pass.length < 6) { err.textContent = 'Password must be at least 6 characters.'; return; }
+  btn.textContent = 'Creating account...'; btn.disabled = true;
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await updateProfile(cred.user, { displayName: name });
+    await afterAuth(cred.user);
+  } catch(e) {
+    err.textContent = e.code === 'auth/email-already-in-use' ? 'Email already registered. Try login.' : 'Signup failed.';
+    btn.textContent = 'Create Account'; btn.disabled = false;
+  }
+};
+
+window.saveProfile = async function() {
+  const name     = document.getElementById('addr-name').value.trim();
+  const phone    = document.getElementById('addr-phone').value.trim();
+  const street   = document.getElementById('addr-street').value.trim();
+  const city     = document.getElementById('addr-city').value.trim();
+  const state    = document.getElementById('addr-state').value.trim();
+  const pincode  = document.getElementById('addr-pin').value.trim();
+  const landmark = document.getElementById('addr-landmark').value.trim();
+  const err      = document.getElementById('addr-err');
+  const btn      = document.getElementById('addr-save-btn');
+  err.textContent = '';
+
+  if (!name || !phone || !street || !city || !state || !pincode) {
+    err.textContent = 'Please fill all required fields marked with *.'; return;
+  }
+  if (!/^\d{10}$/.test(phone)) { err.textContent = 'Enter a valid 10-digit mobile number.'; return; }
+  if (!/^\d{6}$/.test(pincode)) { err.textContent = 'Enter a valid 6-digit pincode.'; return; }
+
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  try {
+    await setDoc(doc(db, 'users', _user.uid), {
+      uid:   _user.uid,
+      name:  _user.displayName || name,
+      email: _user.email,
+      phone,
+      address: { name, phone, street, city, state, pincode, landmark },
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    window.location.href = 'index.html';
+  } catch(e) {
+    err.textContent = 'Could not save. Please try again.';
+    btn.textContent = 'Save & Continue to Store →'; btn.disabled = false;
+  }
+};
+
+window.skipProfile = function() { window.location.href = 'index.html'; };
+</script>
+
+<script>
+function switchView(v) {
+  document.getElementById('view-login').style.display  = v === 'login'  ? 'block' : 'none';
+  document.getElementById('view-signup').style.display = v === 'signup' ? 'block' : 'none';
+}
+function toggleNav() { document.getElementById('nav-links').classList.toggle('open'); }
+window.switchView = switchView;
+</script>
+</body>
+</html>
